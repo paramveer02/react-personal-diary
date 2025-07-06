@@ -1,9 +1,5 @@
 function App() {
-  return (
-    <>
-      <h2>Personal Diary</h2>
-    </>
-  );
+  return <></>;
 }
 
 export default App;
