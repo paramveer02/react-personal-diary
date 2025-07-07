@@ -45,7 +45,7 @@ export default function CreateDiaryEntry() {
 
     // convert image to base64 (for storing in localstorage)
     let imageData = null;
-    if (imageFile && imageFile > 0) {
+    if (imageFile && imageFile instanceof File) {
       imageData = await convertToBase64(imageFile);
     }
 

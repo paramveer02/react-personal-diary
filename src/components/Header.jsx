@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { Button } from "@nextui-org/react";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   return (
@@ -51,6 +52,8 @@ export default function Header() {
           >
             + New Entry
           </Button>
+
+          <ThemeToggle />
         </nav>
       </div>
     </motion.header>
