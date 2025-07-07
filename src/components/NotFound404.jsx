@@ -14,7 +14,7 @@ export default function NotFound() {
         to="/"
         className="bg-white/20 px-6 py-3 rounded-lg text-white font-medium hover:bg-white/30 transition-all"
       >
-        Take Me Back
+        Take Me Home
       </Link>
     </div>
     // </div>
