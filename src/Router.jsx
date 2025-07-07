@@ -1,21 +1,32 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
-import ContactPage from "./pages/ContactPage";
+import CreateDiaryEntry from "./components/entries/CreateDiaryEntry";
 import EntriesPage from "./pages/EntriesPage";
 import Home from "./pages/Home";
-
+import { AnimatePresence } from "framer-motion";
+import NotFound404 from "./components/NotFound404";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <NotFound404 />,
     children: [
       { index: true, element: <Home /> },
-      { path: "contact", element: <ContactPage /> },
+      { path: "create", element: <CreateDiaryEntry /> },
       { path: "entries", element: <EntriesPage /> },
+      { path: "*", element: <NotFound404 /> },
     ],
   },
 ]);
 
 export default function Router() {
-  return <RouterProvider router={router} />;
+  return (
+    <AnimatePresence mode="wait">
+      <RouterProvider
+        router={router}
+        location={location}
+        key={location.pathname}
+      />
+    </AnimatePresence>
+  );
 }
