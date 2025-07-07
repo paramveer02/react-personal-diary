@@ -5,6 +5,7 @@ import EntriesPage from "./pages/EntriesPage";
 import Home from "./pages/Home";
 import { AnimatePresence } from "framer-motion";
 import NotFound404 from "./components/NotFound404";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -14,7 +15,6 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "create", element: <CreateDiaryEntry /> },
       { path: "entries", element: <EntriesPage /> },
-      { path: "*", element: <NotFound404 /> },
     ],
   },
 ]);

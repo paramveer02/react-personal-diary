@@ -7,27 +7,92 @@ import { fireConfetti } from "../../utils/confetti";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+function convertToBase64(file) {
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => res(reader.result);
+    reader.onerror = (err) => rej(err);
+  });
+}
+
 export default function CreateDiaryEntry() {
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
+  const [content, setContent] = useState("");
 
   const submitAction = async (e) => {
     e.preventDefault();
+
+    if (content.length < 20) {
+      toast.error("Minimum 20 characters required!");
+      return;
+    }
+
+    if (content.length > 100) {
+      toast.error("Maximum limit of 100 characters exceeded!");
+      return;
+    }
+
     setLoading(true);
 
     const formData = new FormData(e.target);
     const title = formData.get("title");
     const date = formData.get("date") || startDate.toISOString();
-    const content = formData.get("content");
-    const image = formData.get("image");
+    const imageFile = formData.get("image");
 
     await new Promise((res) => setTimeout(res, 1500));
 
-    console.log("Submitted:", { title, date, content, image });
+    // convert image to base64 (for storing in localstorage)
+    let imageData = null;
+    if (imageFile && imageFile > 0) {
+      imageData = await convertToBase64(imageFile);
+    }
+
+    const newEntry = {
+      id: Date.now(),
+      title,
+      date,
+      content,
+      image: imageData,
+    };
+
+    // get existing entries
+    const existing = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+
+    // check if an entry exists already for selected date
+    const isDuplicateDate = existing.some((entry) => {
+      const savedDate = new Date(entry.date).toDateString();
+      const currentDate = new Date(date).toDateString();
+      return savedDate === currentDate;
+    });
+
+    if (isDuplicateDate) {
+      toast("You've already written something for this date 🧘‍♂️", {
+        icon: "📖",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      setLoading(false);
+      return;
+    }
+
+    // add new entry
+    const updatedEntries = [...existing, newEntry];
+
+    // save to localStorage
+    localStorage.setItem("diaryEntries", JSON.stringify(updatedEntries));
 
     fireConfetti();
     toast.success("Diary entry saved successfully!");
     setLoading(false);
+
+    // reset form
+    setContent("");
+    e.target.reset();
   };
 
   return (
@@ -72,9 +137,23 @@ export default function CreateDiaryEntry() {
         <textarea
           name="content"
           placeholder="What’s on your mind today?"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           className="w-full border border-gray-300 dark:border-gray-700 bg-white/70 dark:bg-gray-800/60 text-gray-900 dark:text-gray-100 rounded-xl px-5 py-3 h-40 resize-none placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          maxLength={100}
           required
         />
+        <p
+          className={`${
+            content.length < 20
+              ? "text-red-400"
+              : content.length >= 100
+              ? "text-yellow-400"
+              : "text-green-400"
+          }`}
+        >
+          characters: {content.length} / 100
+        </p>
 
         {/* Upload Image Button */}
         <div className="space-y-2">
