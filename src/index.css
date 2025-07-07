@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+body {
+  @apply bg-black dark:bg-gray-600;
+}
+
+@layer utilities {
+  .hover\\:shadow-glow-purple:hover {
+    box-shadow: 0 0 12px 3px rgba(168, 85, 247, 0.5); /* Tailwind purple-500 glow */
+  }
+}
