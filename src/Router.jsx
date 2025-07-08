@@ -16,7 +16,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "create", element: <CreateDiaryEntry /> },
       { path: "entries", element: <EntriesPage /> },
-      { path: "entry:id", element: <EntryDetail /> },
+      { path: "entries/:id", element: <EntryDetail /> },
     ],
   },
 ]);

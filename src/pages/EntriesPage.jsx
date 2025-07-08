@@ -3,6 +3,7 @@ import EntryCard from "../components/entries/EntryCard";
 import { entries } from "../dummyData/entriesData";
 import Button from "../components/Button";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function EntriesPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +55,9 @@ export default function EntriesPage() {
               {currentEntries
                 .sort((a, b) => new Date(b.date) - new Date(a.date))
                 .map((entry) => (
-                  <EntryCard key={entry.id} entry={entry} />
+                  <Link to={`/entries/${entry.id}`} key={entry.id}>
+                    <EntryCard key={entry.id} entry={entry} />
+                  </Link>
                 ))}
             </motion.div>
           </AnimatePresence>
